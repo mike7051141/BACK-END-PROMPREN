@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface CompetitionService {
-    ResponseCompetitionDto createCompetition(RequestCompetitionDto requestDto);
+    ResponseCompetitionDto createCompetition(RequestCompetitionDto requestDto) throws Exception;
     void deleteCompetition(Long com_id);
     List<ResponseCompetitionDto> getCompetitions();
     long countCompetitions();

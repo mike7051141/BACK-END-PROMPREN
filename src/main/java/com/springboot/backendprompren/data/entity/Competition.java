@@ -20,7 +20,10 @@ public class Competition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long com_id;
 
+    @Column(unique = true, nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String content;
     private String image;
 

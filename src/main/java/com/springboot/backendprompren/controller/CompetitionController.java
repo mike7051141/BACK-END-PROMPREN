@@ -5,6 +5,8 @@ import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
 import com.springboot.backendprompren.service.CompetitionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,22 +20,26 @@ public class CompetitionController {
     private final CompetitionService competitionService;
 
     @PostMapping("/createCompetitionEntry")
-    public ResponseCompetitionDto createCompetition(@RequestBody RequestCompetitionDto requestDto) {
-        return competitionService.createCompetition(requestDto);
+    public ResponseEntity<ResponseCompetitionDto> createCompetition(@RequestBody RequestCompetitionDto requestDto) throws Exception {
+        ResponseCompetitionDto responseDto = competitionService.createCompetition(requestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @DeleteMapping("/deleteCompetitionEntry/{com_id}")
-    public void deleteCompetition(@PathVariable Long com_id) {
+    public ResponseEntity<String> deleteCompetition(@PathVariable Long com_id) throws Exception {
         competitionService.deleteCompetition(com_id);
+        return ResponseEntity.status(HttpStatus.OK).body("경진대회 삭제완료.");
     }
 
     @GetMapping("/getCompetitionEntries")
-    public List<ResponseCompetitionDto> getCompetitions() {
-        return competitionService.getCompetitions();
+    public ResponseEntity<List<ResponseCompetitionDto>> getCompetitions() throws Exception {
+        List<ResponseCompetitionDto> competitions = competitionService.getCompetitions();
+        return ResponseEntity.status(HttpStatus.OK).body(competitions);
     }
 
     @GetMapping("/countCompetitionEntries")
-    public long countCompetitions() {
-        return competitionService.countCompetitions();
+    public ResponseEntity<Long> countCompetitions() throws Exception {
+        long count = competitionService.countCompetitions();
+        return ResponseEntity.status(HttpStatus.OK).body(count);
     }
 }

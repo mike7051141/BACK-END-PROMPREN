@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +20,12 @@ public class CompetitionServiceImpl implements CompetitionService {
     private CompetitionRepository competitionRepository;
 
     @Override
-    public ResponseCompetitionDto createCompetition(RequestCompetitionDto requestDto) {
+    public ResponseCompetitionDto createCompetition(RequestCompetitionDto requestDto) throws Exception {
+        // Title 중복 확인
+        Optional<Competition> existingCompetition = competitionRepository.findByTitle(requestDto.getTitle());
+        if (existingCompetition.isPresent()) {
+            throw new IllegalArgumentException("Title already exists.");
+        }
         Competition competition = new Competition();
         competition.setTitle(requestDto.getTitle());
         competition.setContent(requestDto.getContent());
