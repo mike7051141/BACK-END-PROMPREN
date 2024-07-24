@@ -1,6 +1,7 @@
-package com.springboot.backendprompren.jwt;
+package com.springboot.backendprompren.config.security;
 
-import com.springboot.backendprompren.service.UserDetailsService;
+import com.springboot.backendprompren.service.CustomUserDetailsService;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,7 +26,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     private final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
-    private UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
+
+
+    //@Autowired
+    //public JwtTokenProvider(UserDetailsService userDetailsService) {
+   //     this.userDetailsService = userDetailsService;
+   // }
 
     @Value("${springboot.jwt.secret}")
     private String secretKey = "secretKey";
@@ -41,8 +49,8 @@ public class JwtTokenProvider {
         logger.info("[init] 시크릿 초기화 완료 : {}",secretKey);
     }
     // jwt 토큰 생성
-    public String createToken(String email, List<String> roles){
-        Claims claims = Jwts.claims().setSubject(email);
+    public String createToken(String account, List<String> roles){
+        Claims claims = Jwts.claims().setSubject(account);
         claims.put("roles",roles);
 
         Date now = new Date();

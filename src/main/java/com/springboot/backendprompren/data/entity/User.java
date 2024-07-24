@@ -16,7 +16,9 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
+@Table
 @Builder
 public class User implements UserDetails{
     @Id
@@ -56,7 +58,7 @@ public class User implements UserDetails{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public String getUsername(){
-        return this.email;
+        return this.account;
     }
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

@@ -1,4 +1,4 @@
-package com.springboot.backendprompren.jwt;
+package com.springboot.backendprompren.config.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +18,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
 
     public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider){
+
         this.jwtTokenProvider = jwtTokenProvider;
     }
 

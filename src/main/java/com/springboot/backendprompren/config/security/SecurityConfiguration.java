@@ -1,9 +1,9 @@
-package com.springboot.backendprompren.config;
+package com.springboot.backendprompren.config.security;
 
+import com.springboot.backendprompren.config.security.JwtAuthenticationFilter;
+import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.handler.CustomAccessDeniedHandler;
 import com.springboot.backendprompren.handler.CustomAuthenticationEntryPoint;
-import com.springboot.backendprompren.jwt.JwtAuthenticationFilter;
-import com.springboot.backendprompren.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +18,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfiguration {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider){
+    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider){
 
         this.jwtTokenProvider = jwtTokenProvider;
     }
