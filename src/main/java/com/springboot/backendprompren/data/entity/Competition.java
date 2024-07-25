@@ -27,9 +27,9 @@ public class Competition {
     private String content;
     private String image;
 
-//    @ManyToOne
-//    @JoinColumn(name = "uid", nullable = false)
-//    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uid")
+    private User user;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -15,7 +15,7 @@ public class ResponseCompetitionDto {
     private String title;
     private String content;
     private String image;
-//    private Long uid;
+    private Long uid;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -25,7 +25,7 @@ public class ResponseCompetitionDto {
         this.title = competition.getTitle();
         this.content = competition.getContent();
         this.image = competition.getImage();
-//        this.uid = competition.getUser().getUid();
+        this.uid = competition.getUser().getUid();
         this.createdAt = competition.getCreatedAt();
         this.updatedAt = competition.getUpdatedAt();
     }
