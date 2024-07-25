@@ -11,5 +11,4 @@ public class RequestCompetitionDto {
     private String title;
     private String content;
     private String image;
-//    private Long uid;
 }
