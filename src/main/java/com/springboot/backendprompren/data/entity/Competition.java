@@ -1,12 +1,8 @@
 package com.springboot.backendprompren.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -30,7 +26,4 @@ public class Competition {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid")
     private User user;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }
