@@ -2,8 +2,9 @@ package com.springboot.backendprompren.service;
 
 import com.springboot.backendprompren.data.dto.resquest.RequestLikedDto;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface LikedService {
-    void addLiked(RequestLikedDto requestDto) throws Exception;
-    void removeLiked(Long likedId);
-    long countLikesForCompetition(Long comId);
+    boolean addLiked(RequestLikedDto requestDto, HttpServletRequest servletRequest) throws Exception;
+    long countLikesForCompetition(Long com_id);
 }

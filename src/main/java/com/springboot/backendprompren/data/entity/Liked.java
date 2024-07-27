@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,6 +26,4 @@ public class Liked {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "com_id")
     private Competition competition;
-
-    private LocalDateTime createdAt;
 }
