@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("prompt")
+@RequestMapping("/api/v1/main")
 public class PromptController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(PromptController.class);
@@ -32,10 +32,8 @@ public class PromptController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 발급 받은 access_token", required = true, dataType = "String", paramType = "header")
-    })
-    @PostMapping()
+
+    @PostMapping("/createPrompt")
     public ResponseEntity<ResponsePromptDto> createPrompt(@RequestBody RequestPromptDto requestPromptDto,
                                                           HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws Exception{
 
@@ -43,10 +41,8 @@ public class PromptController {
         return ResponseEntity.status(HttpStatus.OK).body(savedPromptDto);
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 발급 받은 access_token", required = true, dataType = "String", paramType = "header")
-    })
-    @GetMapping(value = "/{prompt_id}")
+
+    @GetMapping(value = "getPrompt/{prompt_id}")
     public ResponseEntity<ResponsePromptDto> getPrompt(@PathVariable Long prompt_id,
                                                        HttpServletRequest servletRequest,
                                                        HttpServletResponse servletResponse) {
@@ -54,10 +50,8 @@ public class PromptController {
         return ResponseEntity.status(HttpStatus.OK).body(selectedPromptDto);
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 발급 받은 access_token", required = true, dataType = "String", paramType = "header")
-    })
-    @DeleteMapping()
+
+    @DeleteMapping("deletePrompt")
     public void deletePrompt(@RequestParam(value="prompt_id",required = true)Long prompt_id,
                              HttpServletRequest servletRequest,
                              HttpServletResponse servletResponse) throws Exception {
