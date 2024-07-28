@@ -1,10 +1,10 @@
 package com.springboot.backendprompren.service.impl;
 
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
-import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
-import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
+import com.springboot.backendprompren.data.dto.response.*;
 import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
 import com.springboot.backendprompren.data.entity.Prompt;
+import com.springboot.backendprompren.data.entity.Review;
 import com.springboot.backendprompren.data.entity.User;
 import com.springboot.backendprompren.data.repository.PromptRepository;
 import com.springboot.backendprompren.data.repository.UserRepository;
@@ -12,11 +12,15 @@ import com.springboot.backendprompren.service.PromptService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.print.Pageable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -97,8 +101,38 @@ public class PromptServiceImpl implements PromptService {
     }
 
     @Override
-    public List<ResponsePromptDto> getPromptByList() {
-        return null;
+    public ResponsePromptListDto getPromptList(int page, int size,
+                                               HttpServletRequest servletRequest,
+                                               HttpServletResponse servletResponse) {
+        ModelMapper mapper = new ModelMapper();
+        List<ResponsePromptDto> responsePromptDtoList = new ArrayList<>();
+        ResponsePromptListDto responsePromptListDto = new ResponsePromptListDto();
+
+        String token = jwtTokenProvider.resolveToken(servletRequest);
+
+        if(jwtTokenProvider.validationToken(token)) {
+            String account = jwtTokenProvider.getUsername(token);
+            User user = userRepository.getByAccount(account);
+
+            LOGGER.info("[getPromptList] prompt 조회를 진행합니다. account : {}", account);
+
+            Page<Prompt> promptPage = promptRepository.findAll(PageRequest.of(page, size));
+            List<Prompt> promptList = promptPage.getContent();
+
+            for(Prompt prompt : promptList){
+                ResponsePromptDto responsePromptDto = mapper.map(prompt, ResponsePromptDto.class);
+                responsePromptDtoList.add(responsePromptDto);
+            }
+            responsePromptListDto.setItems(responsePromptDtoList);
+            LOGGER.info("[getPromptList] Total elements: {}", promptPage.getTotalElements());
+            LOGGER.info("[getPromptList] Total pages: {}", promptPage.getTotalPages());
+            LOGGER.info("[getPromptList] Current page number: {}", promptPage.getNumber());
+            LOGGER.info("[getPromptList] Number of elements in current page: {}", promptPage.getNumberOfElements());
+
+            LOGGER.info("[getPromptList] prompt 조회가 완료되었습니다. account : {},{}", account);
+        }
+        return responsePromptListDto;
+
     }
 
     @Override

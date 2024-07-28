@@ -2,6 +2,7 @@ package com.springboot.backendprompren.service;
 
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
+import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +18,12 @@ public interface PromptService {
                                 HttpServletRequest servletRequest,
                                 HttpServletResponse servletResponse);
 
-    List<ResponsePromptDto> getPromptByList();
+    ResponsePromptListDto getPromptList(int page, int size,
+                                        HttpServletRequest servletRequest,
+                                        HttpServletResponse servletResponse);
     void deletePrompt(Long prompt_id,
                       HttpServletRequest servletRequest,
                       HttpServletResponse servletResponse) throws Exception;
+
+
 }
