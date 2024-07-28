@@ -3,6 +3,7 @@ package com.springboot.backendprompren.controller;
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
+import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
 import com.springboot.backendprompren.service.PromptService;
@@ -26,6 +27,7 @@ public class PromptController {
 
     private final PromptService promptService;
     private final JwtTokenProvider jwtTokenProvider;
+
     @Autowired
     public PromptController(PromptService promptService, JwtTokenProvider jwtTokenProvider) {
         this.promptService = promptService;
@@ -35,9 +37,9 @@ public class PromptController {
 
     @PostMapping("/createPrompt")
     public ResponseEntity<ResponsePromptDto> createPrompt(@RequestBody RequestPromptDto requestPromptDto,
-                                                          HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws Exception{
+                                                          HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws Exception {
 
-        ResponsePromptDto savedPromptDto = promptService.savePrompt(requestPromptDto,servletRequest,servletResponse);
+        ResponsePromptDto savedPromptDto = promptService.savePrompt(requestPromptDto, servletRequest, servletResponse);
         return ResponseEntity.status(HttpStatus.OK).body(savedPromptDto);
     }
 
@@ -46,16 +48,33 @@ public class PromptController {
     public ResponseEntity<ResponsePromptDto> getPrompt(@PathVariable Long prompt_id,
                                                        HttpServletRequest servletRequest,
                                                        HttpServletResponse servletResponse) {
-        ResponsePromptDto selectedPromptDto = promptService.getPrompt(prompt_id,servletRequest,servletResponse);
+        ResponsePromptDto selectedPromptDto = promptService.getPrompt(prompt_id, servletRequest, servletResponse);
         return ResponseEntity.status(HttpStatus.OK).body(selectedPromptDto);
     }
 
 
     @DeleteMapping("deletePrompt")
-    public void deletePrompt(@RequestParam(value="prompt_id",required = true)Long prompt_id,
+    public void deletePrompt(@RequestParam(value = "prompt_id", required = true) Long prompt_id,
                              HttpServletRequest servletRequest,
                              HttpServletResponse servletResponse) throws Exception {
-        promptService.deletePrompt(prompt_id,servletRequest,servletResponse);
+        promptService.deletePrompt(prompt_id, servletRequest, servletResponse);
         LOGGER.info("[deleteprompt] prompt 삭제를 완료하였습니다.  , prompt id: {}", prompt_id);
+    }
+
+    @GetMapping()
+    public ResponseEntity<ResponsePromptListDto> getPromptList(
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size,
+            HttpServletRequest servletRequest,
+            HttpServletResponse servletResponse) {
+        LOGGER.info("[getToDoList] todo 리스트 조회를 시도하고 있습니다.  page : {}, size : {}"
+                , page, size);
+
+        ResponsePromptListDto promptList = promptService.getPromptList(page-1, size, servletRequest, servletResponse);
+
+        LOGGER.info("[getPrompt] prompt 리스트 조회를 완료하였습니다. , page : {}, size : {}",
+                page, size);
+
+        return ResponseEntity.status(HttpStatus.OK).body(promptList);
     }
 }
