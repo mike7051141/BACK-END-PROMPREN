@@ -61,7 +61,7 @@ public class PromptController {
         LOGGER.info("[deleteprompt] prompt 삭제를 완료하였습니다.  , prompt id: {}", prompt_id);
     }
 
-    @GetMapping()
+    @GetMapping("/getPromptByList")
     public ResponseEntity<ResponsePromptListDto> getPromptList(
             @RequestParam(value = "page", required = true) int page,
             @RequestParam(value = "size", required = true) int size,

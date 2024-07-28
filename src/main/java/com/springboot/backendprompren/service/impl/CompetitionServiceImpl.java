@@ -3,18 +3,26 @@ package com.springboot.backendprompren.service.impl;
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.controller.PromptController;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
+import com.springboot.backendprompren.data.dto.response.ResponseCompetitionListDto;
+import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
+import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
 import com.springboot.backendprompren.data.entity.Competition;
+import com.springboot.backendprompren.data.entity.Prompt;
 import com.springboot.backendprompren.data.entity.User;
 import com.springboot.backendprompren.data.repository.CompetitionRepository;
 import com.springboot.backendprompren.data.repository.UserRepository;
 import com.springboot.backendprompren.service.CompetitionService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,21 +74,39 @@ public class CompetitionServiceImpl implements CompetitionService {
         responseCompetitionDto.setTitle(competition.getTitle());
         responseCompetitionDto.setContent(competition.getContent());
         responseCompetitionDto.setImage(competition.getImage());
+        responseCompetitionDto.setCom_writer(competition.getUser().getNickname());
 
-        // 작성자의 이름을 설정
-        if (competition.getUser() != null) {
-            responseCompetitionDto.setCom_writer(competition.getUser().getName());
-        } else {
-            responseCompetitionDto.setCom_writer(null);
-        }
 
         LOGGER.info("[getCompetition] 경진대회 조회 완료. com_id : {}", com_id);
         return responseCompetitionDto;
     }
 
     @Override
-    public List<ResponseCompetitionDto> getCompetitions() {
-        return null;
+    public ResponseCompetitionListDto getCompetitionList(int page, HttpServletRequest servletRequest) {
+        ModelMapper mapper = new ModelMapper();
+        List<ResponseCompetitionDto> responseCompetitionDtoList = new ArrayList<>();
+        ResponseCompetitionListDto responseCompetitionListDto = new ResponseCompetitionListDto();
+
+        String token = jwtTokenProvider.resolveToken(servletRequest);
+
+        if(jwtTokenProvider.validationToken(token)) {
+            String account = jwtTokenProvider.getUsername(token);
+            User user = userRepository.getByAccount(account);
+
+            LOGGER.info("[getCompetitionList] 경진대회 조회를 진행합니다. account : {}", account);
+
+            Page<Competition> competitionPage = competitionRepository.findAll(PageRequest.of(page, 5));
+            List<Competition> competitionList = competitionPage.getContent();
+
+            for(Competition competition : competitionList){
+                ResponseCompetitionDto responseCompetitionDto = mapper.map(competition, ResponseCompetitionDto.class);
+                responseCompetitionDto.setCom_writer(competition.getUser().getNickname());
+                responseCompetitionDtoList.add(responseCompetitionDto);
+            }
+            responseCompetitionListDto.setItems(responseCompetitionDtoList);
+        }
+        return responseCompetitionListDto;
+
     }
 
     @Override

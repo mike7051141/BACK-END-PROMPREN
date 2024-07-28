@@ -1,6 +1,7 @@
 package com.springboot.backendprompren.controller;
 
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
+import com.springboot.backendprompren.data.dto.response.ResponseCompetitionListDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
 import com.springboot.backendprompren.service.CompetitionService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,9 +33,9 @@ public class CompetitionController {
     }
 
     @GetMapping("/getCompetitionByList")
-    public ResponseEntity<List<ResponseCompetitionDto>> getCompetitions() throws Exception {
-        List<ResponseCompetitionDto> competitions = competitionService.getCompetitions();
-        return ResponseEntity.status(HttpStatus.OK).body(competitions);
+    public ResponseEntity<ResponseCompetitionListDto> getCompetitionList(@RequestParam(value = "page", required = true) int page, HttpServletRequest servletRequest) throws Exception {
+        ResponseCompetitionListDto competitionList = competitionService.getCompetitionList(page - 1, servletRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(competitionList);
     }
 
     @GetMapping("/countCompetitions")
