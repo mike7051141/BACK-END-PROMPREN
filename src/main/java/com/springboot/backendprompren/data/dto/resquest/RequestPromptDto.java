@@ -1,5 +1,6 @@
 package com.springboot.backendprompren.data.dto.resquest;
 
+import com.springboot.backendprompren.data.entity.Condition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class RequestPromptDto {
     private String content;
     private String output;
     private String image;
+    private Condition condition;
 
 }

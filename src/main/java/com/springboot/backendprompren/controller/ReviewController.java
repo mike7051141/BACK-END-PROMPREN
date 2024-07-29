@@ -1,6 +1,6 @@
 package com.springboot.backendprompren.controller;
 
-import com.springboot.backendprompren.config.security.JwtTokenProvider;
+
 import com.springboot.backendprompren.data.dto.response.ResponseReviewDto;
 import com.springboot.backendprompren.data.dto.response.ResponseReviewListDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestReviewDto;
@@ -17,12 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api/v1/review")
 public class ReviewController {
     private final ReviewService reviewService;
-  //  private final JwtTokenProvider jwtTokenProvider;
+
 
     @Autowired
-    public ReviewController(ReviewService reviewService, JwtTokenProvider jwtTokenProvider) {
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
-       // this.jwtTokenProvider = jwtTokenProvider;
+
     }
 
     @PostMapping("/createReview")

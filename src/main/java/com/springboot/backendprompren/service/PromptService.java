@@ -4,6 +4,8 @@ import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
+import com.springboot.backendprompren.data.entity.Condition;
+import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,5 +27,7 @@ public interface PromptService {
                       HttpServletRequest servletRequest,
                       HttpServletResponse servletResponse) throws Exception;
 
-
+    Page<ResponsePromptDto> getFilteredAndSortedProducts(int page, int size, Condition condition, String category,
+                                                                HttpServletRequest servletRequest,
+                                                                HttpServletResponse servletResponse);
 }
