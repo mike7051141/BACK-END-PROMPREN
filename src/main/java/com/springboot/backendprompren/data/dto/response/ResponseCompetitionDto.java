@@ -14,4 +14,5 @@ public class ResponseCompetitionDto {
     private String content;
     private String image;
     private String com_writer;
+    private String createdAt;
 }
