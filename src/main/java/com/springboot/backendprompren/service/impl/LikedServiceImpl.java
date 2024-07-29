@@ -53,6 +53,7 @@ public class LikedServiceImpl implements LikedService {
             Liked liked = new Liked();
             liked.setUser(user);
             liked.setCompetition(competition);
+            liked.setCreatedAt(LocalDateTime.now());
             likedRepository.save(liked);
             LOGGER.info("[addLiked] 좋아요가 추가되었습니다. account : {}", account);
             return true;

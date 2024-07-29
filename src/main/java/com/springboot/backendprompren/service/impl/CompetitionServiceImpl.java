@@ -4,11 +4,8 @@ import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.controller.PromptController;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionListDto;
-import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
-import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
 import com.springboot.backendprompren.data.entity.Competition;
-import com.springboot.backendprompren.data.entity.Prompt;
 import com.springboot.backendprompren.data.entity.User;
 import com.springboot.backendprompren.data.repository.CompetitionRepository;
 import com.springboot.backendprompren.data.repository.UserRepository;
@@ -22,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +46,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         competition.setTitle(requestDto.getTitle());
         competition.setContent(requestDto.getContent());
         competition.setImage(requestDto.getImage());
+        competition.setCreatedAt(LocalDateTime.now());
 
         Competition savedCompetition = competitionRepository.save(competition);
 
@@ -57,6 +56,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         responseCompetitionDto.setContent(savedCompetition.getContent());
         responseCompetitionDto.setImage(savedCompetition.getImage());
         responseCompetitionDto.setCom_writer(user.getName());
+        responseCompetitionDto.setCreatedAt(String.valueOf(savedCompetition.getCreatedAt()));
 
         LOGGER.info("[createCompetition] 경진대회 생성완료. account : {}", account);
         return responseCompetitionDto;
@@ -75,6 +75,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         responseCompetitionDto.setContent(competition.getContent());
         responseCompetitionDto.setImage(competition.getImage());
         responseCompetitionDto.setCom_writer(competition.getUser().getNickname());
+        responseCompetitionDto.setCreatedAt(String.valueOf(competition.getCreatedAt()));
 
 
         LOGGER.info("[getCompetition] 경진대회 조회 완료. com_id : {}", com_id);
