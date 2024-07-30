@@ -80,8 +80,8 @@ public class PromptServiceImpl implements PromptService {
         responsePromptDto.setCategory(savedPrompt.getCategory());
         responsePromptDto.setSummary(savedPrompt.getSummary());
         responsePromptDto.setContent(savedPrompt.getContent());
-        responsePromptDto.setOutput(responsePromptDto.getOutput());
-        responsePromptDto.setImage(responsePromptDto.getImage());
+        responsePromptDto.setOutput(savedPrompt.getOutput());
+        responsePromptDto.setImage(savedPrompt.getImage());
         responsePromptDto.setCondition(savedPrompt.getCondition());
 
         LOGGER.info("[createPrompt] prompt 생성이 완료되었습니다. account : {}", account);
