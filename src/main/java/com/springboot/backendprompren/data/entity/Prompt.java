@@ -30,6 +30,9 @@ public class Prompt {
     private String output;
     @Column(nullable = false)
     private String image;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "prompt_condition", nullable = false)
+    private Condition condition;
 
     @ManyToOne
     @JoinColumn(name="uid")

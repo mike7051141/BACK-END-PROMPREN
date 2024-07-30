@@ -1,17 +1,17 @@
 package com.springboot.backendprompren.controller;
 
-import com.springboot.backendprompren.config.security.JwtTokenProvider;
-import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
+
 import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
+
 import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
+import com.springboot.backendprompren.data.entity.Condition;
 import com.springboot.backendprompren.service.PromptService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +26,11 @@ public class PromptController {
     private final Logger LOGGER = LoggerFactory.getLogger(PromptController.class);
 
     private final PromptService promptService;
-    private final JwtTokenProvider jwtTokenProvider;
+
 
     @Autowired
-    public PromptController(PromptService promptService, JwtTokenProvider jwtTokenProvider) {
+    public PromptController(PromptService promptService) {
         this.promptService = promptService;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
 
@@ -77,4 +76,15 @@ public class PromptController {
 
         return ResponseEntity.status(HttpStatus.OK).body(promptList);
     }
+    @GetMapping("/getPromptByCategory")
+    public Page<ResponsePromptDto> getFilteredAndSortedPrompts(@RequestParam(value = "page", required = true) int page,
+                                                               @RequestParam(value = "size", required = true) int size,
+                                                               @RequestParam(value = "condition",required = false) Condition condition,
+                                                               @RequestParam(value = "category", required = false) String category,
+                                                               HttpServletRequest servletRequest,
+                                                               HttpServletResponse servletResponse){
+
+        return promptService.getFilteredAndSortedProducts(page, size, condition, category,servletRequest,servletResponse);
+    }
 }
+

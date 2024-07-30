@@ -1,10 +1,13 @@
 package com.springboot.backendprompren.service.impl;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.data.dto.response.*;
 import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
+import com.springboot.backendprompren.data.entity.Condition;
 import com.springboot.backendprompren.data.entity.Prompt;
-import com.springboot.backendprompren.data.entity.Review;
+import com.springboot.backendprompren.data.entity.QPrompt;
 import com.springboot.backendprompren.data.entity.User;
 import com.springboot.backendprompren.data.repository.PromptRepository;
 import com.springboot.backendprompren.data.repository.UserRepository;
@@ -13,15 +16,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.springboot.backendprompren.data.entity.QPrompt.prompt;
 
 @Service
 public class PromptServiceImpl implements PromptService {
@@ -30,12 +37,16 @@ public class PromptServiceImpl implements PromptService {
     private final PromptRepository promptRepository;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EntityManager entityManager;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Autowired
-    public PromptServiceImpl(PromptRepository promptRepository, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
+    public PromptServiceImpl(PromptRepository promptRepository, UserRepository userRepository, JwtTokenProvider jwtTokenProvider, EntityManager entityManager, JPAQueryFactory jpaQueryFactory) {
         this.promptRepository = promptRepository;
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.entityManager = entityManager;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     @Override
@@ -58,6 +69,7 @@ public class PromptServiceImpl implements PromptService {
         prompt.setContent(requestPromptDto.getContent());
         prompt.setOutput(requestPromptDto.getOutput());
         prompt.setImage(requestPromptDto.getImage());
+        prompt.setCondition(requestPromptDto.getCondition());
 
         Prompt savedPrompt = promptRepository.save(prompt);
         LOGGER.info("[savePrompt] saved PromptId : {}", savedPrompt.getPrompt_id());
@@ -68,8 +80,9 @@ public class PromptServiceImpl implements PromptService {
         responsePromptDto.setCategory(savedPrompt.getCategory());
         responsePromptDto.setSummary(savedPrompt.getSummary());
         responsePromptDto.setContent(savedPrompt.getContent());
-        responsePromptDto.setOutput(responsePromptDto.getOutput());
-        responsePromptDto.setImage(responsePromptDto.getImage());
+        responsePromptDto.setOutput(savedPrompt.getOutput());
+        responsePromptDto.setImage(savedPrompt.getImage());
+        responsePromptDto.setCondition(savedPrompt.getCondition());
 
         LOGGER.info("[createPrompt] prompt 생성이 완료되었습니다. account : {}", account);
         return responsePromptDto;
@@ -156,4 +169,39 @@ public class PromptServiceImpl implements PromptService {
         }
 
     }
+
+    public Page<ResponsePromptDto>getFilteredAndSortedProducts(int page, int size, Condition condition, String category,
+                                                               HttpServletRequest servletRequest,
+                                                               HttpServletResponse servletResponse) {
+        // 필터링
+        BooleanBuilder filterBuilder = PromptQueryHelper.createFilterBuilder(condition, category, QPrompt.prompt);
+
+        // 필터링 및 정렬 적용
+        List<Prompt> results = getFilteredAndSortedResults(filterBuilder, page, size);
+
+        // 전체 카운트 조회 쿼리
+        long totalCount = jpaQueryFactory.selectFrom(prompt)
+                .where(filterBuilder)
+                .fetchCount();
+        ModelMapper mapper = new ModelMapper();
+
+        List<ResponsePromptDto> responsePromptDtoList = results.stream()
+                .map(prompt -> mapper.map(prompt, ResponsePromptDto.class))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(responsePromptDtoList, PageRequest.of(page, size), totalCount);
+    }
+
+    private List<Prompt> getFilteredAndSortedResults(BooleanBuilder filterBuilder, int page, int size) {
+        QPrompt prompt = QPrompt.prompt;
+        return jpaQueryFactory.selectFrom(prompt)
+                .where(filterBuilder)
+                .offset(page * size)
+                .limit(size)
+                .fetch();
+    }
+
+    private List<ResponsePromptDto> mapToPromptListDto(List<Prompt> results) {return null;}
+
+
 }
