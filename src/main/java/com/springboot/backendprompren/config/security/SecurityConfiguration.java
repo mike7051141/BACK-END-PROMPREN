@@ -65,6 +65,7 @@ public class SecurityConfiguration {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/v2/api-docs",
+                "/index.html",
                 "/swagger-resources/**",
                 "/swagger-ui.html",
                 "/webjars/**",
