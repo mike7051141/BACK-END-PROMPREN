@@ -12,5 +12,7 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review,Long> {
     long countByPrompt(Prompt prompt);
 
-    List<Review> findAllByUser(User user);
+    List<Review> findAllByUserAndPrompt(User user,Prompt prompt);
+
+    List<Review> findTop4ByUserOrderByCreatedAtDesc(User user);
 }

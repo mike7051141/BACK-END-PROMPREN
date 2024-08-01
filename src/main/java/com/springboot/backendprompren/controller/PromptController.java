@@ -84,7 +84,7 @@ public class PromptController {
                                                                HttpServletRequest servletRequest,
                                                                HttpServletResponse servletResponse){
 
-        return promptService.getFilteredAndSortedProducts(page, size, condition, category,servletRequest,servletResponse);
+        return promptService.getFilteredAndSortedProducts(page-1, size, condition, category,servletRequest,servletResponse);
     }
 }
 

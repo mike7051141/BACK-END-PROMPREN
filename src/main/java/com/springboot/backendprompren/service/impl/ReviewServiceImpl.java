@@ -1,11 +1,9 @@
 package com.springboot.backendprompren.service.impl;
 
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
-import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
 import com.springboot.backendprompren.data.dto.response.ResponseReviewDto;
 import com.springboot.backendprompren.data.dto.response.ResponseReviewListDto;
 import com.springboot.backendprompren.data.dto.resquest.RequestReviewDto;
-import com.springboot.backendprompren.data.entity.Competition;
 import com.springboot.backendprompren.data.entity.Prompt;
 import com.springboot.backendprompren.data.entity.Review;
 import com.springboot.backendprompren.data.entity.User;
@@ -21,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -60,6 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setTitle(requestReviewDto.getTitle());
         review.setContent(requestReviewDto.getContent());
         review.setStar(requestReviewDto.getStar());
+        review.setCreatedAt(LocalDateTime.now());
 
         Review savedReview = reviewRepository.save(review);
         LOGGER.info("[savePrompt] saved ReviewId : {}", savedReview.getReview_id());
@@ -71,6 +71,10 @@ public class ReviewServiceImpl implements ReviewService {
         responseReviewDto.setTitle(savedReview.getTitle());
         responseReviewDto.setContent(savedReview.getContent());
         responseReviewDto.setStar(savedReview.getStar());
+        responseReviewDto.setReview_writer(review.getUser().getNickname());
+        responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
+        responseReviewDto.setCreatedAt(String.valueOf(savedReview.getCreatedAt()));
+
 
 
         return responseReviewDto;
@@ -87,12 +91,13 @@ public class ReviewServiceImpl implements ReviewService {
         if(jwtTokenProvider.validationToken(token)) {
             String account = jwtTokenProvider.getUsername(token);
             User user = userRepository.getByAccount(account);
-
+            Prompt prompt = promptRepository.getById(prompt_id);
             LOGGER.info("[getToDoList] review 조회를 진행합니다. account : {}", account);
-
-            List<Review> reviewList = reviewRepository.findAllByUser(user);
+            List<Review> reviewList = reviewRepository.findAllByUserAndPrompt(user,prompt);
             for(Review review : reviewList){
                 ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
+                responseReviewDto.setReview_writer(review.getUser().getNickname());
+                responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
                 responseReviewDtoList.add(responseReviewDto);
             }
             responseReviewListDto.setItems(responseReviewDtoList);
@@ -100,6 +105,37 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return responseReviewListDto;
     }
+
+    @Override
+    public ResponseReviewListDto getTop4ReviewList(Long prompt_id,
+                                                   HttpServletRequest servletRequest,
+                                                   HttpServletResponse servletResponse) {
+        ModelMapper mapper = new ModelMapper();
+        List<ResponseReviewDto> responseReviewDtoList = new ArrayList<>();
+        ResponseReviewListDto responseReviewListDto = new ResponseReviewListDto();
+
+        String token = jwtTokenProvider.resolveToken(servletRequest);
+
+        if (jwtTokenProvider.validationToken(token)) {
+            String account = jwtTokenProvider.getUsername(token);
+            User user = userRepository.getByAccount(account);
+
+            LOGGER.info("[getReviewList] review 조회를 진행합니다. account : {}", account);
+
+            // 최근 4개의 리뷰를 가져옵니다.
+            List<Review> reviewList = reviewRepository.findTop4ByUserOrderByCreatedAtDesc(user);
+            for (Review review : reviewList) {
+                ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
+                responseReviewDto.setReview_writer(review.getUser().getNickname());
+                responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
+                responseReviewDtoList.add(responseReviewDto);
+            }
+            responseReviewListDto.setItems(responseReviewDtoList);
+            LOGGER.info("[getReviewList] review 조회가 완료되었습니다. account : {}", account);
+        }
+        return responseReviewListDto;
+    }
+
 
     @Override
     public long countReviewForPrompt(Long prompt_id) {
