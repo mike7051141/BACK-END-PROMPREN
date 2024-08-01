@@ -88,24 +88,16 @@ public class CompetitionServiceImpl implements CompetitionService {
         List<ResponseCompetitionDto> responseCompetitionDtoList = new ArrayList<>();
         ResponseCompetitionListDto responseCompetitionListDto = new ResponseCompetitionListDto();
 
-        String token = jwtTokenProvider.resolveToken(servletRequest);
+        Page<Competition> competitionPage = competitionRepository.findAll(PageRequest.of(page, 5));
+        List<Competition> competitionList = competitionPage.getContent();
 
-        if(jwtTokenProvider.validationToken(token)) {
-            String account = jwtTokenProvider.getUsername(token);
-            User user = userRepository.getByAccount(account);
-
-            LOGGER.info("[getCompetitionList] 경진대회 조회를 진행합니다. account : {}", account);
-
-            Page<Competition> competitionPage = competitionRepository.findAll(PageRequest.of(page, 5));
-            List<Competition> competitionList = competitionPage.getContent();
-
-            for(Competition competition : competitionList){
-                ResponseCompetitionDto responseCompetitionDto = mapper.map(competition, ResponseCompetitionDto.class);
-                responseCompetitionDto.setCom_writer(competition.getUser().getNickname());
-                responseCompetitionDtoList.add(responseCompetitionDto);
-            }
-            responseCompetitionListDto.setItems(responseCompetitionDtoList);
+        for(Competition competition : competitionList){
+            ResponseCompetitionDto responseCompetitionDto = mapper.map(competition, ResponseCompetitionDto.class);
+            responseCompetitionDto.setCom_writer(competition.getUser().getNickname());
+            responseCompetitionDtoList.add(responseCompetitionDto);
         }
+        responseCompetitionListDto.setItems(responseCompetitionDtoList);
+
         return responseCompetitionListDto;
 
     }
