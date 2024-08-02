@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/v1/like")
 public class LikedController {
 
-    private LikedService likedService;
+    private final LikedService likedService;
 
     @PostMapping("/createLike")
     public ResponseEntity<String> createLike(@RequestBody RequestLikedDto requestDto, HttpServletRequest servletRequest) throws Exception {
