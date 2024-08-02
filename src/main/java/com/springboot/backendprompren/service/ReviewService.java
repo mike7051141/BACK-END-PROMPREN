@@ -19,6 +19,10 @@ public interface ReviewService {
     ResponseReviewListDto getReviewList(Long prompt_id,HttpServletRequest servletRequest,
                                           HttpServletResponse servletResponse);
 
+    ResponseReviewListDto getTop4ReviewList(Long prompt_id,
+                                            HttpServletRequest servletRequest,
+                                            HttpServletResponse servletResponse);
+
     long countReviewForPrompt(Long prompt_id);
 }
 

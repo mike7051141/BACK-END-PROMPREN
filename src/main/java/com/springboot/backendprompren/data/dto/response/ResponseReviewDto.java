@@ -11,5 +11,8 @@ public class ResponseReviewDto {
     private Long review_id;
     private String title;
     private String content;
+    private String review_writer;
+    private String prompt_title;
     private int star;
+    private String createdAt;
 }

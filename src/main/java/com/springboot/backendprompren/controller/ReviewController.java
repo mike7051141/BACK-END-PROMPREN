@@ -48,4 +48,12 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(reviewList);
     }
 
+    @GetMapping("/getTop4ReviewList/{prompt_id}")
+    public ResponseEntity<ResponseReviewListDto> getTop4ReviewList( @PathVariable Long prompt_id, HttpServletRequest servletRequest,
+                                                                    HttpServletResponse servletResponse){
+        ResponseReviewListDto Top4List= reviewService.getTop4ReviewList(prompt_id, servletRequest,servletResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(Top4List);
+    }
+
+
 }

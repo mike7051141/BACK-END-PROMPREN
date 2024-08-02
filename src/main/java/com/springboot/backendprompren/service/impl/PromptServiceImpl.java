@@ -82,6 +82,7 @@ public class PromptServiceImpl implements PromptService {
         responsePromptDto.setContent(savedPrompt.getContent());
         responsePromptDto.setOutput(savedPrompt.getOutput());
         responsePromptDto.setImage(savedPrompt.getImage());
+        responsePromptDto.setPrompt_writer(prompt.getUser().getNickname());
         responsePromptDto.setCondition(savedPrompt.getCondition());
 
         LOGGER.info("[createPrompt] prompt 생성이 완료되었습니다. account : {}", account);
@@ -102,12 +103,10 @@ public class PromptServiceImpl implements PromptService {
         ResponsePromptDto responsePromptDto = new ResponsePromptDto();
 
         if(jwtTokenProvider.validationToken(token)){
-            User user = userRepository.getByAccount(account);
-
             Prompt prompt = promptRepository.getById(prompt_id);
 
-            if(user.getUid().equals(prompt.getUser().getUid()))
-                responsePromptDto = mapper.map(prompt,ResponsePromptDto.class);
+            responsePromptDto = mapper.map(prompt,ResponsePromptDto.class);
+           responsePromptDto.setPrompt_writer(prompt.getUser().getNickname());
         }
         LOGGER.info("[getPrompt] prompt 조회 완료되었습니다. account : {}", account);
         return responsePromptDto;
