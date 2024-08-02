@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/v1/like")
 public class LikedController {
 
-    @Autowired
     private LikedService likedService;
 
     @PostMapping("/createLike")

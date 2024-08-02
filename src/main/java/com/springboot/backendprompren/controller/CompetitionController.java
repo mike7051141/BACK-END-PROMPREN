@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/v1/competition")
 public class CompetitionController {
 
-    @Autowired
     private final CompetitionService competitionService;
 
     @PostMapping("/createCompetition")
