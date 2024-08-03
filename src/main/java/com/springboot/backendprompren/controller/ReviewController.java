@@ -36,8 +36,10 @@ public class ReviewController {
     }
 
     @GetMapping("/countReview/{prompt_id}")
-    public ResponseEntity<Long> countReveiwForPrompt(@PathVariable Long prompt_id) {
-        Long count =  reviewService.countReviewForPrompt(prompt_id);
+    public ResponseEntity<Long> countReveiwForPrompt(@PathVariable Long prompt_id,
+                                                     HttpServletRequest servletRequest,
+                                                     HttpServletResponse servletResponse) {
+        Long count =  reviewService.countReviewForPrompt(prompt_id, servletRequest, servletResponse);
         return ResponseEntity.status(HttpStatus.OK).body(count);
     }
 

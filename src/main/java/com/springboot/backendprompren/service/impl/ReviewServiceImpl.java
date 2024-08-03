@@ -123,11 +123,11 @@ public class ReviewServiceImpl implements ReviewService {
         if (jwtTokenProvider.validationToken(token)) {
             String account = jwtTokenProvider.getUsername(token);
             User user = userRepository.getByAccount(account);
-
+            Prompt prompt = promptRepository.getById(prompt_id);
             LOGGER.info("[getReviewList] review 조회를 진행합니다. account : {}", account);
 
             // 최근 4개의 리뷰를 가져옵니다.
-            List<Review> reviewList = reviewRepository.findTop4ByUserOrderByCreatedAtDesc(user);
+            List<Review> reviewList = reviewRepository.findTop4ByUserAndPromptOrderByCreatedAtDesc(user,prompt);
             for (Review review : reviewList) {
                 ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
                 responseReviewDto.setReview_writer(review.getUser().getNickname());
@@ -144,10 +144,14 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
-    public long countReviewForPrompt(Long prompt_id) {
+    public long countReviewForPrompt(Long prompt_id, HttpServletRequest servletRequest,
+                                     HttpServletResponse servletResponse) {
+        String token = jwtTokenProvider.resolveToken(servletRequest);
+        String account = jwtTokenProvider.getUsername(token);
+        User user = userRepository.getByAccount(account);
         Prompt prompt = promptRepository.findById(prompt_id)
                 .orElseThrow(() -> new IllegalArgumentException("프롬프트를 찾을 수 없습니다."));
-        return reviewRepository.countByPrompt(prompt);
+        return reviewRepository.countByUserAndPrompt(user,prompt);
     }
 
 }

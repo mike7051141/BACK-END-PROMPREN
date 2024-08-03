@@ -10,9 +10,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review,Long> {
-    long countByPrompt(Prompt prompt);
+    long countByUserAndPrompt(User user, Prompt prompt);
 
     List<Review> findAllByUserAndPrompt(User user,Prompt prompt);
 
-    List<Review> findTop4ByUserOrderByCreatedAtDesc(User user);
+    //List<Review> findTop4ByUserOrderByCreatedAtDesc(User user);
+
+    List<Review> findTop4ByUserAndPromptOrderByCreatedAtDesc(User user, Prompt prompt);
 }

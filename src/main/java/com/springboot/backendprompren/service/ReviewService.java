@@ -23,6 +23,12 @@ public interface ReviewService {
                                             HttpServletRequest servletRequest,
                                             HttpServletResponse servletResponse);
 
-    long countReviewForPrompt(Long prompt_id);
+    //long countReviewForPrompt(Long prompt_id);
+
+    //long countReviewForUserAndPrompt(Long prompt_id, HttpServletRequest servletRequest,
+                             // HttpServletResponse servletResponse);
+
+    long countReviewForPrompt(Long prompt_id, HttpServletRequest servletRequest,
+                              HttpServletResponse servletResponse);
 }
 
