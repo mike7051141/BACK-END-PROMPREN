@@ -13,6 +13,7 @@ public class ResponseReviewDto {
     private String content;
     private String review_writer;
     private String prompt_title;
+    private String writer_thumbnail;
     private int star;
     private String createdAt;
 }

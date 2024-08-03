@@ -73,6 +73,7 @@ public class ReviewServiceImpl implements ReviewService {
         responseReviewDto.setStar(savedReview.getStar());
         responseReviewDto.setReview_writer(review.getUser().getNickname());
         responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
+        responseReviewDto.setWriter_thumbnail(review.getUser().getThumbnail());
         responseReviewDto.setCreatedAt(String.valueOf(savedReview.getCreatedAt()));
 
 
@@ -98,6 +99,7 @@ public class ReviewServiceImpl implements ReviewService {
                 ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
                 responseReviewDto.setReview_writer(review.getUser().getNickname());
                 responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
+                responseReviewDto.setWriter_thumbnail(review.getUser().getThumbnail());
                 responseReviewDtoList.add(responseReviewDto);
             }
             responseReviewListDto.setItems(responseReviewDtoList);
