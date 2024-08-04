@@ -12,9 +12,15 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review,Long> {
     long countByUserAndPrompt(User user, Prompt prompt);
 
-    List<Review> findAllByUserAndPrompt(User user,Prompt prompt);
+    //List<Review> findAllByUserAndPrompt(User user,Prompt prompt);
 
     //List<Review> findTop4ByUserOrderByCreatedAtDesc(User user);
 
-    List<Review> findTop4ByUserAndPromptOrderByCreatedAtDesc(User user, Prompt prompt);
+   // List<Review> findTop4ByUserAndPromptOrderByCreatedAtDesc(User user, Prompt prompt);
+
+    List<Review> findAllByPrompt(Prompt prompt);
+
+    List<Review> findTop4ByPromptOrderByCreatedAtDesc(Prompt prompt);
+
+    long countByPrompt(Prompt prompt);
 }

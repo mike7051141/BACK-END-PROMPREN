@@ -95,7 +95,7 @@ public class ReviewServiceImpl implements ReviewService {
             User user = userRepository.getByAccount(account);
             Prompt prompt = promptRepository.getById(prompt_id);
             LOGGER.info("[getToDoList] review 조회를 진행합니다. account : {}", account);
-            List<Review> reviewList = reviewRepository.findAllByUserAndPrompt(user,prompt);
+            List<Review> reviewList = reviewRepository.findAllByPrompt(prompt);
             for(Review review : reviewList){
                 ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
                 responseReviewDto.setReview_writer(review.getUser().getNickname());
@@ -127,7 +127,7 @@ public class ReviewServiceImpl implements ReviewService {
             LOGGER.info("[getReviewList] review 조회를 진행합니다. account : {}", account);
 
             // 최근 4개의 리뷰를 가져옵니다.
-            List<Review> reviewList = reviewRepository.findTop4ByUserAndPromptOrderByCreatedAtDesc(user,prompt);
+            List<Review> reviewList = reviewRepository.findTop4ByPromptOrderByCreatedAtDesc(prompt);
             for (Review review : reviewList) {
                 ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
                 responseReviewDto.setReview_writer(review.getUser().getNickname());
@@ -151,7 +151,7 @@ public class ReviewServiceImpl implements ReviewService {
         User user = userRepository.getByAccount(account);
         Prompt prompt = promptRepository.findById(prompt_id)
                 .orElseThrow(() -> new IllegalArgumentException("프롬프트를 찾을 수 없습니다."));
-        return reviewRepository.countByUserAndPrompt(user,prompt);
+        return reviewRepository.countByPrompt(prompt);
     }
 
 }
