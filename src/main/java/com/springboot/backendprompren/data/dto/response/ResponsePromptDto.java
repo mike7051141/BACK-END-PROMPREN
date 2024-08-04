@@ -19,5 +19,6 @@ public class ResponsePromptDto {
     private String image;
     private String prompt_writer;
     private Condition condition;
+    private String createdAt;
 
 }

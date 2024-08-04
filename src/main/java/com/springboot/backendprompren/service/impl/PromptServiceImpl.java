@@ -1,6 +1,7 @@
 package com.springboot.backendprompren.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.data.dto.response.*;
@@ -24,6 +25,7 @@ import org.modelmapper.ModelMapper;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,6 +72,7 @@ public class PromptServiceImpl implements PromptService {
         prompt.setOutput(requestPromptDto.getOutput());
         prompt.setImage(requestPromptDto.getImage());
         prompt.setCondition(requestPromptDto.getCondition());
+        prompt.setCreatedAt(LocalDateTime.now());
 
         Prompt savedPrompt = promptRepository.save(prompt);
         LOGGER.info("[savePrompt] saved PromptId : {}", savedPrompt.getPrompt_id());
@@ -84,6 +87,7 @@ public class PromptServiceImpl implements PromptService {
         responsePromptDto.setImage(savedPrompt.getImage());
         responsePromptDto.setPrompt_writer(prompt.getUser().getNickname());
         responsePromptDto.setCondition(savedPrompt.getCondition());
+        responsePromptDto.setCreatedAt(String.valueOf(savedPrompt.getCreatedAt()));
 
         LOGGER.info("[createPrompt] prompt 생성이 완료되었습니다. account : {}", account);
         return responsePromptDto;
@@ -193,9 +197,11 @@ public class PromptServiceImpl implements PromptService {
 
     private List<Prompt> getFilteredAndSortedResults(BooleanBuilder filterBuilder, int page, int size) {
         QPrompt prompt = QPrompt.prompt;
+        OrderSpecifier<?> sortOrder = prompt.createdAt.desc();
         return jpaQueryFactory.selectFrom(prompt)
                 .where(filterBuilder)
                 .offset(page * size)
+                .orderBy(sortOrder)
                 .limit(size)
                 .fetch();
     }

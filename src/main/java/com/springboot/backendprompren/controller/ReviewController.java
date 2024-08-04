@@ -36,12 +36,18 @@ public class ReviewController {
     }
 
     @GetMapping("/countReview/{prompt_id}")
-    public ResponseEntity<Long> countReveiwForPrompt(@PathVariable Long prompt_id,
+    public ResponseEntity<String> countReveiwForPrompt(@PathVariable Long prompt_id,
                                                      HttpServletRequest servletRequest,
                                                      HttpServletResponse servletResponse) {
-        Long count =  reviewService.countReviewForPrompt(prompt_id, servletRequest, servletResponse);
-        return ResponseEntity.status(HttpStatus.OK).body(count);
+        try {
+            Long count = reviewService.countReviewForPrompt(prompt_id, servletRequest, servletResponse);
+            return ResponseEntity.status(HttpStatus.OK).body("리뷰 수: " + count);
+        } catch (IllegalArgumentException e) {
+            // Prompt가 존재하지 않을 때의 메시지 처리
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("프롬프트를 찾을 수 없습니다.");
+        }
     }
+
 
     @GetMapping("/getReviewList/{prompt_id}")
     public ResponseEntity<ResponseReviewListDto> getReviewList( @PathVariable Long prompt_id, HttpServletRequest servletRequest,
