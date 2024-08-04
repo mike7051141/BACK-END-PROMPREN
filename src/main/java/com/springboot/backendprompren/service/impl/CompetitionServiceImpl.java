@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,7 +89,9 @@ public class CompetitionServiceImpl implements CompetitionService {
         List<ResponseCompetitionDto> responseCompetitionDtoList = new ArrayList<>();
         ResponseCompetitionListDto responseCompetitionListDto = new ResponseCompetitionListDto();
 
-        Page<Competition> competitionPage = competitionRepository.findAll(PageRequest.of(page, 5));
+        // 'createdDate' 필드를 기준으로 내림차순 정렬
+        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Competition> competitionPage = competitionRepository.findAll(pageRequest);
         List<Competition> competitionList = competitionPage.getContent();
 
         for(Competition competition : competitionList){
