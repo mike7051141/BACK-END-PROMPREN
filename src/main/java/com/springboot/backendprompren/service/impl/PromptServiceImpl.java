@@ -98,21 +98,20 @@ public class PromptServiceImpl implements PromptService {
     public ResponsePromptDto getPrompt(Long prompt_id,
                                        HttpServletRequest servletRequest,
                                        HttpServletResponse servletResponse) {
-        String token = jwtTokenProvider.resolveToken(servletRequest);
-        String account = jwtTokenProvider.getUsername(token);
 
-        LOGGER.info("[getPrompt] prompt 조회를 진행합니다. account : {}", account);
-
-        ModelMapper mapper = new ModelMapper();
+        Prompt prompt = promptRepository.getById(prompt_id);
         ResponsePromptDto responsePromptDto = new ResponsePromptDto();
+        responsePromptDto.setPrompt_id(prompt.getPrompt_id());
+        responsePromptDto.setTitle(prompt.getTitle());
+        responsePromptDto.setCategory(prompt.getCategory());
+        responsePromptDto.setSummary(prompt.getSummary());
+        responsePromptDto.setContent(prompt.getContent());
+        responsePromptDto.setOutput(prompt.getOutput());
+        responsePromptDto.setImage(prompt.getImage());
+        responsePromptDto.setPrompt_writer(prompt.getUser().getNickname());
+        responsePromptDto.setCondition(prompt.getCondition());
+        responsePromptDto.setCreatedAt(prompt.getCreatedAt().toString());
 
-        if(jwtTokenProvider.validationToken(token)){
-            Prompt prompt = promptRepository.getById(prompt_id);
-
-            responsePromptDto = mapper.map(prompt,ResponsePromptDto.class);
-           responsePromptDto.setPrompt_writer(prompt.getUser().getNickname());
-        }
-        LOGGER.info("[getPrompt] prompt 조회 완료되었습니다. account : {}", account);
         return responsePromptDto;
     }
 
