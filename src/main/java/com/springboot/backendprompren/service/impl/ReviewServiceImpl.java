@@ -88,25 +88,18 @@ public class ReviewServiceImpl implements ReviewService {
         List<ResponseReviewDto> responseReviewDtoList = new ArrayList<>();
         ResponseReviewListDto responseReviewListDto = new ResponseReviewListDto();
 
-        String token = jwtTokenProvider.resolveToken(servletRequest);
-
-        if(jwtTokenProvider.validationToken(token)) {
-            String account = jwtTokenProvider.getUsername(token);
-            User user = userRepository.getByAccount(account);
-            Prompt prompt = promptRepository.getById(prompt_id);
-            LOGGER.info("[getToDoList] review 조회를 진행합니다. account : {}", account);
-            List<Review> reviewList = reviewRepository.findAllByPrompt(prompt);
-            for(Review review : reviewList){
-                ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
-                responseReviewDto.setReview_writer(review.getUser().getNickname());
-                responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
-                responseReviewDto.setWriter_thumbnail(review.getUser().getThumbnail());
-                responseReviewDto.setPrompt_image(review.getPrompt().getImage());
-                responseReviewDtoList.add(responseReviewDto);
-            }
-            responseReviewListDto.setItems(responseReviewDtoList);
-            LOGGER.info("[getToDoList] review 조회가 완료되었습니다. account : {}", account);
+        Prompt prompt = promptRepository.getById(prompt_id);
+        List<Review> reviewList = reviewRepository.findAllByPrompt(prompt);
+        for(Review review : reviewList){
+            ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
+            responseReviewDto.setReview_writer(review.getUser().getNickname());
+            responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
+            responseReviewDto.setWriter_thumbnail(review.getUser().getThumbnail());
+            responseReviewDto.setPrompt_image(review.getPrompt().getImage());
+            responseReviewDtoList.add(responseReviewDto);
         }
+        responseReviewListDto.setItems(responseReviewDtoList);
+
         return responseReviewListDto;
     }
 
@@ -118,27 +111,20 @@ public class ReviewServiceImpl implements ReviewService {
         List<ResponseReviewDto> responseReviewDtoList = new ArrayList<>();
         ResponseReviewListDto responseReviewListDto = new ResponseReviewListDto();
 
-        String token = jwtTokenProvider.resolveToken(servletRequest);
+        Prompt prompt = promptRepository.getById(prompt_id);
 
-        if (jwtTokenProvider.validationToken(token)) {
-            String account = jwtTokenProvider.getUsername(token);
-            User user = userRepository.getByAccount(account);
-            Prompt prompt = promptRepository.getById(prompt_id);
-            LOGGER.info("[getReviewList] review 조회를 진행합니다. account : {}", account);
-
-            // 최근 4개의 리뷰를 가져옵니다.
-            List<Review> reviewList = reviewRepository.findTop4ByPromptOrderByCreatedAtDesc(prompt);
-            for (Review review : reviewList) {
-                ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
-                responseReviewDto.setReview_writer(review.getUser().getNickname());
-                responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
-                responseReviewDto.setWriter_thumbnail(review.getUser().getThumbnail());
-                responseReviewDto.setPrompt_image(review.getPrompt().getImage());
-                responseReviewDtoList.add(responseReviewDto);
-            }
-            responseReviewListDto.setItems(responseReviewDtoList);
-            LOGGER.info("[getReviewList] review 조회가 완료되었습니다. account : {}", account);
+        // 최근 4개의 리뷰를 가져옵니다.
+        List<Review> reviewList = reviewRepository.findTop4ByPromptOrderByCreatedAtDesc(prompt);
+        for (Review review : reviewList) {
+            ResponseReviewDto responseReviewDto = mapper.map(review, ResponseReviewDto.class);
+            responseReviewDto.setReview_writer(review.getUser().getNickname());
+            responseReviewDto.setPrompt_title(review.getPrompt().getTitle());
+            responseReviewDto.setWriter_thumbnail(review.getUser().getThumbnail());
+            responseReviewDto.setPrompt_image(review.getPrompt().getImage());
+            responseReviewDtoList.add(responseReviewDto);
         }
+        responseReviewListDto.setItems(responseReviewDtoList);
+
         return responseReviewListDto;
     }
 
@@ -146,9 +132,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public long countReviewForPrompt(Long prompt_id, HttpServletRequest servletRequest,
                                      HttpServletResponse servletResponse) {
-        String token = jwtTokenProvider.resolveToken(servletRequest);
-        String account = jwtTokenProvider.getUsername(token);
-        User user = userRepository.getByAccount(account);
         Prompt prompt = promptRepository.findById(prompt_id)
                 .orElseThrow(() -> new IllegalArgumentException("프롬프트를 찾을 수 없습니다."));
         return reviewRepository.countByPrompt(prompt);
