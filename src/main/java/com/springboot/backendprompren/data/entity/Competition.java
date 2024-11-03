@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Competition")
+@Builder
 public class Competition extends BaseEntity{
 
     @Id
