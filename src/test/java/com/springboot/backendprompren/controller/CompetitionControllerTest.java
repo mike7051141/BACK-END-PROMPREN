@@ -2,7 +2,7 @@ package com.springboot.backendprompren.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
+import com.springboot.backendprompren.data.dto.request.RequestCompetitionDto;
 import com.springboot.backendprompren.service.CompetitionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

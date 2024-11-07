@@ -1,9 +1,8 @@
 package com.springboot.backendprompren.controller;
 
-import com.springboot.backendprompren.data.dto.resquest.RequestLikedDto;
+import com.springboot.backendprompren.data.dto.request.RequestLikedDto;
 import com.springboot.backendprompren.service.LikedService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

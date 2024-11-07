@@ -1,6 +1,6 @@
 package com.springboot.backendprompren.service;
 
-import com.springboot.backendprompren.data.dto.resquest.RequestLikedDto;
+import com.springboot.backendprompren.data.dto.request.RequestLikedDto;
 
 import javax.servlet.http.HttpServletRequest;
 

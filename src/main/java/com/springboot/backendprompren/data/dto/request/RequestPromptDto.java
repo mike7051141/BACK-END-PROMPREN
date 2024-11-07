@@ -1,11 +1,9 @@
-package com.springboot.backendprompren.data.dto.resquest;
+package com.springboot.backendprompren.data.dto.request;
 
 import com.springboot.backendprompren.data.entity.Condition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
 
 @Data
 @NoArgsConstructor

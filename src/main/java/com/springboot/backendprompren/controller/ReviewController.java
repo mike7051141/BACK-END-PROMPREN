@@ -3,7 +3,7 @@ package com.springboot.backendprompren.controller;
 
 import com.springboot.backendprompren.data.dto.response.ResponseReviewDto;
 import com.springboot.backendprompren.data.dto.response.ResponseReviewListDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestReviewDto;
+import com.springboot.backendprompren.data.dto.request.RequestReviewDto;
 import com.springboot.backendprompren.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

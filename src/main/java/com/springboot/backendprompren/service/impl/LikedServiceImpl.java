@@ -2,7 +2,7 @@ package com.springboot.backendprompren.service.impl;
 
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.controller.LikedController;
-import com.springboot.backendprompren.data.dto.resquest.RequestLikedDto;
+import com.springboot.backendprompren.data.dto.request.RequestLikedDto;
 import com.springboot.backendprompren.data.entity.Competition;
 import com.springboot.backendprompren.data.entity.Liked;
 import com.springboot.backendprompren.data.entity.User;
@@ -13,14 +13,10 @@ import com.springboot.backendprompren.service.LikedService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

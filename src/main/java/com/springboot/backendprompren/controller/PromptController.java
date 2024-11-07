@@ -4,7 +4,7 @@ package com.springboot.backendprompren.controller;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
 
-import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
+import com.springboot.backendprompren.data.dto.request.RequestPromptDto;
 import com.springboot.backendprompren.data.entity.Condition;
 import com.springboot.backendprompren.service.PromptService;
 

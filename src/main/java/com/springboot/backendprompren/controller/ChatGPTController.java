@@ -1,9 +1,8 @@
 package com.springboot.backendprompren.controller;
 
 import com.springboot.backendprompren.data.dto.response.ResponseChatGPT;
-import com.springboot.backendprompren.data.dto.resquest.RequestChatGPT;
-import com.springboot.backendprompren.data.dto.resquest.RequestGuideDto;
-import com.springboot.backendprompren.data.entity.Message;
+import com.springboot.backendprompren.data.dto.request.RequestChatGPT;
+import com.springboot.backendprompren.data.dto.request.RequestGuideDto;
 import com.springboot.backendprompren.service.GuideService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -11,12 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

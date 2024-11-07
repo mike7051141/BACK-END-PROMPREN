@@ -1,15 +1,13 @@
 package com.springboot.backendprompren.service;
 
-import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
 import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
+import com.springboot.backendprompren.data.dto.request.RequestPromptDto;
 import com.springboot.backendprompren.data.entity.Condition;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public interface PromptService {
 

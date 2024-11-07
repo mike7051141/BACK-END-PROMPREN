@@ -1,4 +1,4 @@
-package com.springboot.backendprompren.data.dto.resquest;
+package com.springboot.backendprompren.data.dto.request;
 
 import lombok.*;
 

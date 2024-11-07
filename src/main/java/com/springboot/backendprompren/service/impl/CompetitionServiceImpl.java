@@ -4,7 +4,7 @@ import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.controller.PromptController;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionListDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
+import com.springboot.backendprompren.data.dto.request.RequestCompetitionDto;
 import com.springboot.backendprompren.data.entity.Competition;
 import com.springboot.backendprompren.data.entity.User;
 import com.springboot.backendprompren.data.repository.CompetitionRepository;

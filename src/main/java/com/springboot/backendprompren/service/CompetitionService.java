@@ -2,12 +2,9 @@ package com.springboot.backendprompren.service;
 
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionListDto;
-import com.springboot.backendprompren.data.dto.response.ResponsePromptListDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
+import com.springboot.backendprompren.data.dto.request.RequestCompetitionDto;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public interface CompetitionService {
     ResponseCompetitionDto createCompetition(RequestCompetitionDto requestDto, HttpServletRequest servletRequest) throws Exception;

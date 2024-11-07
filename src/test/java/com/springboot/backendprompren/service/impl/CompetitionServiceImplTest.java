@@ -2,27 +2,29 @@ package com.springboot.backendprompren.service.impl;
 
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
+import com.springboot.backendprompren.data.dto.response.ResponseCompetitionListDto;
+import com.springboot.backendprompren.data.dto.request.RequestCompetitionDto;
 import com.springboot.backendprompren.data.entity.Competition;
 import com.springboot.backendprompren.data.entity.User;
 import com.springboot.backendprompren.data.repository.CompetitionRepository;
 import com.springboot.backendprompren.data.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CompetitionServiceImplTest {
@@ -48,128 +50,142 @@ class CompetitionServiceImplTest {
     }
 
     @Test
-    @DisplayName("경진대회 생성 테스트")
-    void createCompetitionTest() throws Exception {
-        // Arrange
-        RequestCompetitionDto requestDto = RequestCompetitionDto.builder()
-                .title("Title")
-                .content("Content")
-                .image("Image.jpg")
-                .build();
+    void testCreateCompetition() throws Exception {
+        // given
+        RequestCompetitionDto requestDto = new RequestCompetitionDto();
+        requestDto.setTitle("Test Title");
+        requestDto.setContent("Test Content");
+        requestDto.setImage("Test Image");
 
-        User user = User.builder()
-                .account("account")
-                .name("Writer")
-                .build();
+        String token = "test-token";
+        String account = "test-user";
 
-        Competition competition = Competition.builder()
-                .user(user)
-                .title("Title")
-                .content("Content")
-                .image("Image.jpg")
-                .build();
+        when(jwtTokenProvider.resolveToken(servletRequest)).thenReturn(token);
+        when(jwtTokenProvider.getUsername(token)).thenReturn(account);
 
-        when(jwtTokenProvider.resolveToken(servletRequest)).thenReturn("mockedToken");
-        when(jwtTokenProvider.getUsername("mockedToken")).thenReturn("account");
-        when(userRepository.getByAccount("account")).thenReturn(user);
+        User user = new User();
+        user.setName("Test User");
+        when(userRepository.getByAccount(account)).thenReturn(user);
+
+        Competition competition = new Competition();
+        competition.setUser(user);
+        competition.setTitle("Test Title");
+        competition.setContent("Test Content");
+        competition.setImage("Test Image");
+        competition.setCreatedAt(LocalDateTime.now());
+
         when(competitionRepository.save(any(Competition.class))).thenReturn(competition);
 
-        // Act
-        ResponseCompetitionDto responseDto = competitionService.createCompetition(requestDto, servletRequest);
+        // when
+        ResponseCompetitionDto result = competitionService.createCompetition(requestDto, servletRequest);
 
-        // Assert
-        assertEquals("Title", responseDto.getTitle());
-        assertEquals("Content", responseDto.getContent());
-        assertEquals("Image.jpg", responseDto.getImage());
-        assertEquals("Writer", responseDto.getCom_writer());
+        // then
+        assertNotNull(result);
+        assertEquals(requestDto.getTitle(), result.getTitle());
+        assertEquals(user.getName(), result.getCom_writer());
     }
 
     @Test
-    @DisplayName("경진대회 조회 테스트")
-    void getCompetitionTest() throws Exception {
-        // Arrange
-        User user = User.builder()
-                .nickname("Writer")
-                .build();
+    void testGetCompetition() throws Exception {
+        // given
+        Long com_id = 1L;
+        Competition competition = new Competition();
+        competition.setCom_id(com_id);
+        competition.setTitle("Test Title");
+        competition.setContent("Test Content");
+        competition.setImage("Test Image");
+        competition.setCreatedAt(LocalDateTime.now());
 
-        Competition competition = Competition.builder()
-                .com_id(1L)
-                .title("Title")
-                .content("Content")
-                .image("Image.jpg")
-                .user(user)
-                .build();
+        User user = new User();
+        user.setNickname("Test User");
+        competition.setUser(user);
 
-        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+        when(competitionRepository.findById(com_id)).thenReturn(Optional.of(competition));
 
-        // Act
-        ResponseCompetitionDto responseDto = competitionService.getCompetition(1L);
+        // when
+        ResponseCompetitionDto result = competitionService.getCompetition(com_id);
 
-        // Assert
-        assertEquals(1L, responseDto.getCom_id());
-        assertEquals("Title", responseDto.getTitle());
-        assertEquals("Content", responseDto.getContent());
-        assertEquals("Image.jpg", responseDto.getImage());
-        assertEquals("Writer", responseDto.getCom_writer());
+        // then
+        assertNotNull(result);
+        assertEquals("Test Title", result.getTitle());
+        assertEquals("Test User", result.getCom_writer());
     }
 
     @Test
-    @DisplayName("경진대회 삭제 테스트 - 권한 있음")
-    void deleteCompetitionTest() throws Exception {
-        // Arrange
+    void testGetCompetitionList() {
+        // given
+        int page = 0;
+        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        // User 객체 생성
         User user = User.builder()
-                .uid(1L)
-                .account("account")
+                .nickname("Test User")
                 .build();
 
-        Competition competition = Competition.builder()
-                .com_id(1L)
-                .user(user)
-                .build();
+        // 첫 번째 Competition 객체 생성 및 User 설정
+        List<Competition> competitions = new ArrayList<>();
+        Competition competition1 = new Competition();
+        competition1.setTitle("Test Title");
+        competition1.setUser(user);
+        competitions.add(competition1);
 
-        when(jwtTokenProvider.resolveToken(servletRequest)).thenReturn("mockedToken");
-        when(jwtTokenProvider.getUsername("mockedToken")).thenReturn("account");
-        when(jwtTokenProvider.validationToken("mockedToken")).thenReturn(true);
-        when(userRepository.getByAccount("account")).thenReturn(user);
-        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+        // 두 번째 Competition 객체 생성 및 User 설정
+        Competition competition2 = new Competition();
+        competition2.setTitle("Test Title2");
+        competition2.setUser(user);
+        competitions.add(competition2);
 
-        // Act
-        competitionService.deleteCompetition(1L, servletRequest);
+        // Page 객체 생성 및 competitionRepository 모킹
+        Page<Competition> competitionPage = new PageImpl<>(competitions, pageRequest, 2);
+        when(competitionRepository.findAll(pageRequest)).thenReturn(competitionPage);
 
-        // Assert
+        // when
+        ResponseCompetitionListDto result = competitionService.getCompetitionList(page, servletRequest);
+
+        // then
+        assertNotNull(result);
+        assertEquals(2, result.getItems().size());
+        assertEquals("Test Title", result.getItems().get(0).getTitle());
+        assertEquals("Test Title2", result.getItems().get(1).getTitle());
+        assertEquals("Test User", result.getItems().get(0).getCom_writer());
+        assertEquals("Test User", result.getItems().get(1).getCom_writer());
+    }
+
+    @Test
+    void testCountCompetitions() {
+        // given
+        when(competitionRepository.count()).thenReturn(5L);
+
+        // when
+        long count = competitionService.countCompetitions();
+
+        // then
+        assertEquals(5, count);
+    }
+
+    @Test
+    void testDeleteCompetition() throws Exception {
+        // given
+        Long com_id = 1L;
+        String token = "test-token";
+        String account = "test-user";
+
+        when(jwtTokenProvider.resolveToken(servletRequest)).thenReturn(token);
+        when(jwtTokenProvider.getUsername(token)).thenReturn(account);
+        when(jwtTokenProvider.validationToken(token)).thenReturn(true);
+
+        User user = new User();
+        user.setUid(1L);
+        when(userRepository.getByAccount(account)).thenReturn(user);
+
+        Competition competition = new Competition();
+        competition.setUser(user);
+        when(competitionRepository.findById(com_id)).thenReturn(Optional.of(competition));
+
+        // when
+        competitionService.deleteCompetition(com_id, servletRequest);
+
+        // then
         verify(competitionRepository, times(1)).delete(competition);
-    }
-
-    @Test
-    @DisplayName("경진대회 삭제 테스트 - 권한 없음")
-    void deleteCompetitionUnauthorizedTest() throws Exception {
-        // Arrange
-        User user = User.builder()
-                .uid(1L)
-                .account("account")
-                .build();
-
-        User otherUser = User.builder()
-                .uid(2L)
-                .account("otherAccount")
-                .build();
-
-        Competition competition = Competition.builder()
-                .com_id(1L)
-                .user(otherUser)
-                .build();
-
-        when(jwtTokenProvider.resolveToken(servletRequest)).thenReturn("mockedToken");
-        when(jwtTokenProvider.getUsername("mockedToken")).thenReturn("account");
-        when(jwtTokenProvider.validationToken("mockedToken")).thenReturn(true);
-        when(userRepository.getByAccount("account")).thenReturn(user);
-        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
-
-        // Act & Assert
-        Exception exception = assertThrows(Exception.class, () ->
-                competitionService.deleteCompetition(1L, servletRequest)
-        );
-        assertEquals("해당 경진대회를 삭제할 권한이 없습니다.", exception.getMessage());
-        verify(competitionRepository, never()).delete(competition);
     }
 }

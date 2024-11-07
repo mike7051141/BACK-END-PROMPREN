@@ -1,8 +1,8 @@
 package com.springboot.backendprompren.service.impl;
 
 import com.springboot.backendprompren.data.dto.response.ResponseChatGPT;
-import com.springboot.backendprompren.data.dto.resquest.RequestChatGPT;
-import com.springboot.backendprompren.data.dto.resquest.RequestGuideDto;
+import com.springboot.backendprompren.data.dto.request.RequestChatGPT;
+import com.springboot.backendprompren.data.dto.request.RequestGuideDto;
 import com.springboot.backendprompren.service.GuideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -66,7 +66,7 @@ public class SignServiceImpl implements SignService {
         logger.info("[getSignResultDto] USER 정보 들어왔는지 확인 후 결과값 주입");
 
         if(!saveUser.getEmail().isEmpty()){
-            setSucces(signUpResultDto);
+            setSuccess(signUpResultDto);
         }else{
             setFail(signUpResultDto);
         }
@@ -91,11 +91,11 @@ public class SignServiceImpl implements SignService {
                         user.getRoles()))
                 .build();
         logger.info("[getSignInResult] SignInResultDto 객체에 값 주입");
-        setSucces(signInResultDto);
+        setSuccess(signInResultDto);
         return signInResultDto;
     }
 
-    private void setSucces(SignUpResultDto result){
+    private void setSuccess(SignUpResultDto result){
         result.setSuccess(true);
         result.setCode(CommonResponse.SUCCESS.getCode());
         result.setMsg(CommonResponse.SUCCESS.getMsg());

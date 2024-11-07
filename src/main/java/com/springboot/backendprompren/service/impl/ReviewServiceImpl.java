@@ -3,7 +3,7 @@ package com.springboot.backendprompren.service.impl;
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.data.dto.response.ResponseReviewDto;
 import com.springboot.backendprompren.data.dto.response.ResponseReviewListDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestReviewDto;
+import com.springboot.backendprompren.data.dto.request.RequestReviewDto;
 import com.springboot.backendprompren.data.entity.Prompt;
 import com.springboot.backendprompren.data.entity.Review;
 import com.springboot.backendprompren.data.entity.User;

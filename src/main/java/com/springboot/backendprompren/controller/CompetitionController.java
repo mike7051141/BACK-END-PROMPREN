@@ -2,10 +2,9 @@ package com.springboot.backendprompren.controller;
 
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionDto;
 import com.springboot.backendprompren.data.dto.response.ResponseCompetitionListDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestCompetitionDto;
+import com.springboot.backendprompren.data.dto.request.RequestCompetitionDto;
 import com.springboot.backendprompren.service.CompetitionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

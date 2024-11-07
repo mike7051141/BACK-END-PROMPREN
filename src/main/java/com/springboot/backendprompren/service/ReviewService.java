@@ -1,14 +1,11 @@
 package com.springboot.backendprompren.service;
 
-import com.springboot.backendprompren.data.dto.response.ResponsePromptDto;
 import com.springboot.backendprompren.data.dto.response.ResponseReviewDto;
 import com.springboot.backendprompren.data.dto.response.ResponseReviewListDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
-import com.springboot.backendprompren.data.dto.resquest.RequestReviewDto;
+import com.springboot.backendprompren.data.dto.request.RequestReviewDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public interface ReviewService {
 

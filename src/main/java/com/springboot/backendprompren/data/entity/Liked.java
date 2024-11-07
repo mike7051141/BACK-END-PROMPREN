@@ -1,9 +1,6 @@
 package com.springboot.backendprompren.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Liked")
+@Builder
 public class Liked extends BaseEntity{
 
     @Id

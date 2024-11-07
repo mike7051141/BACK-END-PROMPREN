@@ -1,4 +1,4 @@
-package com.springboot.backendprompren.data.dto.resquest;
+package com.springboot.backendprompren.data.dto.request;
 
 import com.springboot.backendprompren.data.entity.Message;
 import lombok.Data;

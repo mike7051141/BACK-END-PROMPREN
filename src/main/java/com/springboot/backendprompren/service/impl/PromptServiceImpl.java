@@ -5,7 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.springboot.backendprompren.config.security.JwtTokenProvider;
 import com.springboot.backendprompren.data.dto.response.*;
-import com.springboot.backendprompren.data.dto.resquest.RequestPromptDto;
+import com.springboot.backendprompren.data.dto.request.RequestPromptDto;
 import com.springboot.backendprompren.data.entity.Condition;
 import com.springboot.backendprompren.data.entity.Prompt;
 import com.springboot.backendprompren.data.entity.QPrompt;
