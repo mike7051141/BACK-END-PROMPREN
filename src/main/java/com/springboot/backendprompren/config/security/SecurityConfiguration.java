@@ -38,6 +38,7 @@ public class SecurityConfiguration {
 
                 .and()
                 .authorizeRequests() // 리퀘스트에 대한 사용권한 체크
+                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll() // 프리플라이트 요청를 허용
                 .antMatchers("/sign-api/sign-in", "/sign-api/sign-up",
                         "/sign-api/exception", "/api/files/**").permitAll() // 가입 및 로그인 주소는 허용
                 .antMatchers(HttpMethod.GET, "/api/v1/**").permitAll()

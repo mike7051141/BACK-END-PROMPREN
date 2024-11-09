@@ -24,12 +24,13 @@ public class S3UploadService {
     public String saveFile(MultipartFile multipartFile) throws IOException {
         String originalFilename = multipartFile.getOriginalFilename();
 
+        String fileKey = "promfren/" + originalFilename;
+
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
-        amazonS3.putObject(bucket, originalFilename, multipartFile.getInputStream(), metadata);
-        return amazonS3.getUrl(bucket, originalFilename).toString();
+        amazonS3.putObject(bucket, fileKey, multipartFile.getInputStream(), metadata);
+        return amazonS3.getUrl(bucket, fileKey).toString();
     }
-
 }

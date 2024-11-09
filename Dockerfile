@@ -1,5 +1,5 @@
 # 베이스 이미지 설정 (Java 17 사용)
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-jdk-alpine
 
 # 작업 디렉터리 생성
 WORKDIR /app

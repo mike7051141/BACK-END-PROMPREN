@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://3.36.67.189:3000",
                         "http://3.36.67.189",
+                        "http://3.36.67.189:8080",
                         "http://promfren.store:3000",
                         "http://promfren.store"
                 )
